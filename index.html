@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>For You 💖</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      font-family: "Segoe UI", sans-serif;
+      color: #fff;
+      text-align: center;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 40px;
+      border-radius: 20px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 1.5rem;
+      margin: 10px 0;
+    }
+
+    .love {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #ffebf0;
+    }
+
+    .heart {
+      color: red;
+      animation: beat 1s infinite;
+      display: inline-block;
+    }
+
+    @keyframes beat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      border-bottom: 2px solid #fff;
+    }
+
+    a:hover {
+      color: #ffebf0;
+      border-bottom: 2px solid #ffebf0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>💌 A Little Message For You</h1>
+
+    <p>
+      <a href="#">
+        zoa is the best thing that has ever happened to me
+      </a>
+    </p>
+
+    <p class="love">
+      I LOVE HER SO MUCH <span class="heart">❤️</span>
+    </p>
+  </div>
+
+</body>
+</html>
