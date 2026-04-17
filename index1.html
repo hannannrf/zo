@@ -1,0 +1,97 @@
+// Assumes you already have: <canvas id="canvas"></canvas> and easeljs + tweenjs loaded.
+
+const canvas = document.getElementById("canvas");
+const stage = new createjs.Stage(canvas);
+
+let w = canvas.width = window.innerWidth;
+let h = canvas.height = window.innerHeight;
+
+// Your container name was "StaticRange" — keep it, but make it real.
+const StaticRange = new createjs.Container();
+stage.addChild(StaticRange);
+
+// Background layer (hearts go behind everything)
+const bg = new createjs.Container();
+stage.addChildAt(bg, 0);
+
+// --- Your text (kept, only tiny fixes) ---
+var text = new createjs.Text(
+  "I love you more than anything zo. You the prettiest girl in the world",
+  "bold 24px Arial",
+  "#312"
+);
+
+text.textAlign = "center";
+text.textBaseline = "middle";
+text.x = w / 2;
+text.y = h / 2;
+StaticRange.addChild(text);
+
+// --- Heart background ---
+function makeHeart(color) {
+  const s = new createjs.Shape();
+  const g = s.graphics;
+  g.f(color);
+
+  // Simple heart using bezier curves (size ~ 1 unit, scaled later)
+  g.mt(0, -0.3)
+    .bt(-0.6, -0.9, -1.2, -0.1, 0, 0.8)
+    .bt(1.2, -0.1, 0.6, -0.9, 0, -0.3)
+    .cp();
+
+  return s;
+}
+
+function spawnHeart() {
+  const palette = ["#ff4d6d", "#ff758f", "#ffd6e0", "#ff2d55", "#ff8fab"];
+  const heart = makeHeart(palette[(Math.random() * palette.length) | 0]);
+
+  const scale = 18 + Math.random() * 26; // pixel-ish size
+  heart.scaleX = heart.scaleY = scale;
+
+  heart.x = Math.random() * w;
+  heart.y = h + 60;
+
+  heart.alpha = 0.15 + Math.random() * 0.35;
+  heart.rotation = (Math.random() * 40) - 20;
+
+  bg.addChild(heart);
+
+  const drift = (Math.random() * 140) - 70;
+  const riseTime = 4000 + Math.random() * 3500;
+
+  createjs.Tween.get(heart)
+    .to(
+      { y: -80, x: heart.x + drift, alpha: 0 },
+      riseTime,
+      createjs.Ease.quadOut
+    )
+    .call(() => bg.removeChild(heart));
+}
+
+// Keep a steady amount of hearts on screen
+const targetHearts = 45;
+setInterval(() => {
+  const missing = Math.max(0, targetHearts - bg.numChildren);
+  for (let i = 0; i < Math.min(6, missing); i++) spawnHeart();
+}, 200);
+
+// --- (Optional) If you still want your “captureContainers” loop, keep it valid ---
+const captureContainers = [];
+for (let i = 0; i < 100; i++) {
+  const captureContainer = new createjs.Container();
+  captureContainer.cache(0, 0, w, h);
+  captureContainers.push(captureContainer);
+}
+
+// Render loop
+createjs.Ticker.framerate = 60;
+createjs.Ticker.on("tick", stage);
+
+// Resize handling
+window.addEventListener("resize", () => {
+  w = canvas.width = window.innerWidth;
+  h = canvas.height = window.innerHeight;
+  text.x = w / 2;
+  text.y = h / 2;
+});
